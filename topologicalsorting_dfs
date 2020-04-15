@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void makelist(vector<int > a[] , int x , int y){
+	a[x].push_back(y);
+}
+
+void topsort(vector<int > adj[], bool vis[] , stack<int > &st ,int i, int level[]){  // &stack passby reference
+	vis[i]=true;  // making the current vertex visited.
+	
+	auto it= adj[i].begin();
+	while(it!=adj[i].end()){
+		if(vis[*it]==false)
+		level[*it]=level[i]+1;
+		topsort(adj,vis,st,*it,level);
+		it++;
+	}
+	
+	st.push(i);
+
+}
+int main(){
+	int n,m,x,y;
+	cin>>n>>m;
+	vector<int > adj[n+1];
+	for(int i =0 ; i< m ; i++){
+		cin>>x>>y;
+		makelist(adj,x,y);
+	}
+	bool *vis = new bool[n+1];
+	stack<int > st;
+	memset(vis,false,n+1);  // making all the indexes non visited.
+    set<int > ss[n+1];
+	int level[n+1];
+	memset(level,0,n+1);
+
+	for(int i =1 ;i <= n ; i++){
+		if(vis[i]==false){
+			
+			topsort(adj,vis,st,i,level);
+		}
+	} 
+	
+	while(!st.empty()){
+		cout<<st.top()<<" ";
+		st.pop();
+	}
+	
+}
